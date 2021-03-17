@@ -18,18 +18,23 @@ class GraphGenerator(text_data, label_data):
         # Create the necessary adjacency matrices as described in paper
         hashtag_pos_list = []
         mention_pos_list = []
+        layer_val_list   = []
 
         list_tweet = tweet.split()
+        
 
         # Searches for hashtags and mentions and keeps track of their location in the tweet
         for curr_word in list_tweet:
             if curr_word[0] == "#":
                 hashtag_pos_list.append(list_tweet.index(curr_word))
-
-                if curr_word[0]
+                layer_val_list.append(1)
             elif curr_word[0] == "@":
                 mention_pos_list.append(list_tweet.index(curr_word))
-        
+                layer_val_list.append(2)
+            else:
+                layer_val_list.append(0)
+
+
         num_hashtag = len(hashtag_pos_list) 
         num_mention = len(mention_pos_list)
         num_keyword = len(list_tweet) - (num_hashtag + num_mention)
@@ -41,6 +46,8 @@ class GraphGenerator(text_data, label_data):
         
         B_hk = np.zeros((num_hashtag,num_keyword))
         B_mk = np.zeros((num_mention,num_keyword))
+        B_kh = np.transpose(B_hk)
+        B_km = np.transpose(B_mk)
         
         # Create intra-layer adjacency matrix for hashtag layer by setting diagonal to zero
         for i in range(num_hashtag):
@@ -57,12 +64,24 @@ class GraphGenerator(text_data, label_data):
         B_hm = np.ones((num_hashtag,num_mention))
         B_mh = np.transpose(B_hm)
 
-        # Create intra-layer adjacency matrix for keyword layer
-        anchor_list = hashtag_pos_list + mention_pos_list
-        anchor_list = sorted(anchor_list)
-
-        for index_val in anchor_list:
+        for k in range(len(layer_val_list)-1):
             
+            curr_val = layer_val_list[k]
+            next_val = layer_val_list[k+1]
+
+            if curr_val == 0 and next_val == 0:
+                A_k[k,k+1] = 1
+            elif curr_val == 0 and next_val == 1:
+                B_kh[k,k+1] = 1
+            elif curr_val == 1 and next_val == 0:
+                B_hk[k,k+1] = 1
+            elif curr_val == 0 and next_val == 2:
+                B_km[k,k+1] = 1
+            elif curr_val == 2 and next_val == 0:
+                B_mk[k,k+1] = 1
+
+        return A_h, A_k, A_m, B_hk, B_hm, B_kh, B_km, B_mh, B_mk
+
 
 
 
