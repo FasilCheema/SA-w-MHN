@@ -6,13 +6,14 @@ Purpose: This module is used to create a multilayer network represented as a gra
 import networkx as nx 
 import numpy as np 
 
-class GraphGenerator(text_data, label_data):
+class GraphGenerator():
     # initialize class
     def __init__(self):
         self.layer_words = ["#","@"]
 
     def StringParser(self):
         # Take text data and feed into next module sequentially 
+        return null
 
     def MatrixGenerator(self, tweet):
         # Create the necessary adjacency matrices as described in paper
@@ -64,6 +65,8 @@ class GraphGenerator(text_data, label_data):
         B_hm = np.ones((num_hashtag,num_mention))
         B_mh = np.transpose(B_hm)
 
+
+            
         for k in range(len(layer_val_list)-1):
             
             curr_val = layer_val_list[k]
@@ -81,17 +84,3 @@ class GraphGenerator(text_data, label_data):
                 B_mk[k,k+1] = 1
 
         return A_h, A_k, A_m, B_hk, B_hm, B_kh, B_km, B_mh, B_mk
-
-
-
-
-
-
-         
-        
-
-
-if __name__ == "__main__":
-    test_tweet = "@handle word word word word #hashtag @mention word word #hashtag"
-    test_label = 
-    
