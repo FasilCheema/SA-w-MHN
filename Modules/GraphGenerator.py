@@ -17,12 +17,14 @@ class GraphGenerator():
 
     def MatrixGenerator(self, tweet):
         # Create the necessary adjacency matrices as described in paper
+        
+        #Keeps position of each relevant layers in the tweet
         hashtag_pos_list = []
         mention_pos_list = []
+        keyword_pos_list = []
         layer_val_list   = []
 
         list_tweet = tweet.split()
-        
 
         # Searches for hashtags and mentions and keeps track of their location in the tweet
         for curr_word in list_tweet:
@@ -33,6 +35,7 @@ class GraphGenerator():
                 mention_pos_list.append(list_tweet.index(curr_word))
                 layer_val_list.append(2)
             else:
+                keyword_pos_list.append(list_tweet.index(curr_word))
                 layer_val_list.append(0)
 
 
@@ -47,8 +50,8 @@ class GraphGenerator():
         
         B_hk = np.zeros((num_hashtag,num_keyword))
         B_mk = np.zeros((num_mention,num_keyword))
-        B_kh = np.transpose(B_hk)
-        B_km = np.transpose(B_mk)
+        B_kh = np.zeros((num_keyword,num_hashtag))
+        B_km = np.zeros((num_keyword,num_mention))
         
         # Create intra-layer adjacency matrix for hashtag layer by setting diagonal to zero
         for i in range(num_hashtag):
@@ -65,22 +68,30 @@ class GraphGenerator():
         B_hm = np.ones((num_hashtag,num_mention))
         B_mh = np.transpose(B_hm)
 
-
-            
         for k in range(len(layer_val_list)-1):
             
             curr_val = layer_val_list[k]
             next_val = layer_val_list[k+1]
 
             if curr_val == 0 and next_val == 0:
-                A_k[k,k+1] = 1
+                k_pos1 = keyword_pos_list.index(k)
+                k_pos2 = keyword_pos_list.index(k+1)
+                A_k[k_pos1,k_pos2] = 1
             elif curr_val == 0 and next_val == 1:
-                B_kh[k,k+1] = 1
+                k_pos = keyword_pos_list.index(k)
+                h_pos = hashtag_pos_list.index(k+1)
+                B_kh[k_pos,h_pos] = 1
             elif curr_val == 1 and next_val == 0:
-                B_hk[k,k+1] = 1
+                h_pos = hashtag_pos_list.index(k)
+                k_pos = keyword_pos_list.index(k+1)
+                B_hk[h_pos,k_pos] = 1
             elif curr_val == 0 and next_val == 2:
-                B_km[k,k+1] = 1
+                k_pos = keyword_pos_list.index(k)
+                m_pos = mention_pos_list.index(k+1)
+                B_km[k_pos,m_pos] = 1
             elif curr_val == 2 and next_val == 0:
-                B_mk[k,k+1] = 1
+                m_pos = mention_pos_list.index(k)
+                k_pos = keyword_pos_list.index(k+1)
+                B_mk[m_pos,k_pos] = 1
 
         return A_h, A_k, A_m, B_hk, B_hm, B_kh, B_km, B_mh, B_mk
