@@ -11,10 +11,6 @@ class GraphGenerator():
     def __init__(self):
         self.layer_words = ["#","@"]
 
-    def StringParser(self):
-        # Take text data and feed into next module sequentially 
-        return null
-
     def MatrixGenerator(self, tweet):
         # Create the necessary adjacency matrices as described in paper
         
@@ -95,3 +91,16 @@ class GraphGenerator():
                 B_mk[m_pos,k_pos] = 1
 
         return A_h, A_k, A_m, B_hk, B_hm, B_kh, B_km, B_mh, B_mk
+
+    def SupraMatrixGenerator(self, A_h, A_k, A_m, B_hk, B_hm, B_kh, B_km, B_mh, B_mk):
+        ''' Creates Supra Adjacency matrix as described in the paper, using the relevant given matrices, basically assembles it
+        '''
+        #First concatenate along the row axes 
+        row_mat1 = np.concatenate((A_h,B_mh,B_kh))
+        row_mat2 = np.concatenate((B_hm,A_m,B_km))
+        row_mat3 = np.concatenate((B_hk,B_mk,A_k))
+
+        #Concatenate each 'row matrix' along the column matrix now
+        supra_matrix = np.concatenate((row_mat1,row_mat2,row_mat3),axis=1)
+
+        return supra_matrix
