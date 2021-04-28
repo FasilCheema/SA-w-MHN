@@ -93,14 +93,30 @@ class GraphGenerator():
         return A_h, A_k, A_m, B_hk, B_hm, B_kh, B_km, B_mh, B_mk
 
     def SupraMatrixGenerator(self, A_h, A_k, A_m, B_hk, B_hm, B_kh, B_km, B_mh, B_mk):
-        ''' Creates Supra Adjacency matrix as described in the paper, using the relevant given matrices, basically assembles it
+        ''' Creates Supra Adjacency matrix as described in the paper, using the relevant given matrices the function basically assembles it
         '''
-        #First concatenate along the row axes 
+        #First concatenate along the row axes, take three of the matrices and join them to make one giant column matrix 
         row_mat1 = np.concatenate((A_h,B_mh,B_kh))
         row_mat2 = np.concatenate((B_hm,A_m,B_km))
         row_mat3 = np.concatenate((B_hk,B_mk,A_k))
 
-        #Concatenate each 'row matrix' along the column matrix now
+        #From the previous block, take the giant column matrices and now stack them horizontally to create the supra matrix
         supra_matrix = np.concatenate((row_mat1,row_mat2,row_mat3),axis=1)
 
         return supra_matrix
+    def ProbMatrixGenerator(self, A_h, A_k, A_m, B_hk, B_hm, B_kh, B_km, B_mh, B_mk, lambda_param, delta, num_layers=3):
+        ''' Takes in 9 special matrices and modifies them to create a probability transition matrix that is necessary to create random walks.
+            More specifically it alters the matrices to create 9 new matrices that are then fed into the Supra Matrix generator function 
+            defined in this class.
+        '''
+        Ah_p  = (1-lambda_param)*A_h
+        Ak_p  = (1-lambda_param)*A_k
+        Am_p  = (1-lambda_param)*A_m
+        Bhk_p = (lambda_param/(num_layers-1))*B_hk
+        Bhm_p = (lambda_param/(num_layers-1))*B_hm
+        Bkh_p = (lambda_param/(num_layers-1))*B_kh
+        Bkm_p = (lambda_param/(num_layers-1))*B_km
+        Bmh_p = (lambda_param/(num_layers-1))*B_mh
+        Bmk_p = (lambda_param/(num_layers-1))*B_mk
+
+        return Ah_p, Ak_p, Am_p, Bhk_p, Bhm_p, Bkh_p, Bkm_p, Bmh_p, Bmk_p

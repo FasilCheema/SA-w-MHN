@@ -1,12 +1,12 @@
 from GraphGenerator import GraphGenerator
 from Preprocessor import Preprocessor
 
-#%% Create instances of each class to be tested
+# Create instances of each class to be tested
 GraphGenerator = GraphGenerator()
 Preprocessor = Preprocessor()
 
 
-#%% Test Case for Preprocessor 
+# Test Case for Preprocessor 
 # initialize class
 # Test for initialize_dir
 parent_dir = Preprocessor.initialize_dir()
@@ -27,7 +27,7 @@ cleaned_data = Preprocessor.clean_data(data)
 print(cleaned_data)
 print(cleaned_data[5])
 
-#%% Test Case for GraphGenerator
+# Test Case for GraphGenerator
 #tweets for test cases
 tweet1 = "@Mention"
 tweet2 = "Keyword"
@@ -84,3 +84,26 @@ print(Bmh_6)
 print(' next ')
 print(Bmk_6)
 
+#Test for SupraMatrixGenerator 
+ 
+sup1 = GraphGenerator.SupraMatrixGenerator(Ah_1, Ak_1, Am_1, Bhk_1, Bhm_1, Bkh_1, Bkm_1, Bmh_1, Bmk_1)
+sup2 = GraphGenerator.SupraMatrixGenerator(Ah_2, Ak_2, Am_2, Bhk_2, Bhm_2, Bkh_2, Bkm_2, Bmh_2, Bmk_2)
+sup3 = GraphGenerator.SupraMatrixGenerator(Ah_3, Ak_3, Am_3, Bhk_3, Bhm_3, Bkh_3, Bkm_3, Bmh_3, Bmk_3)
+sup4 = GraphGenerator.SupraMatrixGenerator(Ah_4, Ak_4, Am_4, Bhk_4, Bhm_4, Bkh_4, Bkm_4, Bmh_4, Bmk_4)
+sup5 = GraphGenerator.SupraMatrixGenerator(Ah_5, Ak_5, Am_5, Bhk_5, Bhm_5, Bkh_5, Bkm_5, Bmh_5, Bmk_5)
+sup6 = GraphGenerator.SupraMatrixGenerator(Ah_6, Ak_6, Am_6, Bhk_6, Bhm_6, Bkh_6, Bkm_6, Bmh_6, Bmk_6)
+
+print('Test For Supra Adjacency Matrix')
+print(sup1)
+print('next')
+print(sup2)
+print('next')
+print(sup3)
+print('next')
+print(sup4)
+print('next')
+print(sup5)
+print('next')
+print(sup6)
+
+#Test for Probability Matrix Generator 
