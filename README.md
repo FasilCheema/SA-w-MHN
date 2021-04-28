@@ -11,5 +11,8 @@ Make sure you have installed all of the following prerequisites on your developm
 * networkx (latest)
 * editdistance (latest)
 * emoji (latest)
+<h4>Proposed framework</h4>
+<img src="https://github.com/gloitongbam/SA_Hetero_Net/blob/master/ensemble_new.png" alt="Framework">
+
 ## Results 
 ![Screenshot](Results.png)
