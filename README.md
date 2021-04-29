@@ -20,7 +20,8 @@ The purpose of each file in the modules folder is as the following :
 <h4>Proposed framework</h4>
 <img src="https://github.com/gloitongbam/SA_Hetero_Net/blob/master/ensemble_new.png" alt="Framework">
 
-
+Note: Py files with a number are borrowed from the original repo: for ex
+1____.py 
 
 ## Results 
 ![Screenshot](Results.png)
